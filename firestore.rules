@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read: if isSelf(uid);
+      allow create: if isSelf(uid);
+      allow update: if isSelf(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.email == resource.data.email;
+    }
+
+    match /students/{uid} {
+      allow read, create, update: if isSelf(uid);
+    }
+
+    // Course content is read by signed-in app users.
+    // Instructor/admin writes are performed through the FastAPI backend with
+    // Firebase Admin SDK, which bypasses client security rules.
+    match /courses/{document=**} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /lessons/{document=**} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /quizzes/{document=**} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /quiz_results/{document=**} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+  }
+}

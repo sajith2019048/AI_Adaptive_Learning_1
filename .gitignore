@@ -1,0 +1,37 @@
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Environment and sensitive keys
+.env
+*.json
+!mobile_app/pubspec.json
+serviceAccountKey.json
+google-services.json
+
+# Python backend
+backend/.venv/
+**/__pycache__/
+*.pyc
+
+# Flutter & Build outputs
+**/build/
+**/.dart_tool/
+**/.pub/
+**/.pub-cache/
+**/.flutter-plugins-dependencies
+
+# Android
+**/android/local.properties
+**/android/.gradle/
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+*.apk
+
+# OS files
+.DS_Store
+Thumbs.db
